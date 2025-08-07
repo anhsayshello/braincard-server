@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
-import User from "../models/user.js";
+import User from "../models/user.model.js";
 import AppError from "../utils/apperror.js";
 
 const userService = {
+  async getMe(userId) {
+    const user = await User.findById(userId);
+    return user;
+  },
+
   async getStats(userId) {
     const user = await User.findById(userId);
     if (!user) {
@@ -90,6 +95,14 @@ const userService = {
       totalDecks,
       ...cardStatsResult,
     };
+  },
+
+  async updateUser(userId, name) {
+    const updatedUser = await User.findByIdAndUpdate(
+      { _id: userId },
+      { name: name }
+    );
+    return updatedUser;
   },
 };
 
