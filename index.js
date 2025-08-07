@@ -3,15 +3,15 @@ import logger from "./utils/logger.js";
 import config from "./utils/config.js";
 import mongoose from "mongoose";
 import cors from "cors";
-import usersRouter from "./controllers/users.js";
-import decksRouter from "./controllers/decks.js";
-import searchRouter from "./controllers/search.js";
-import feedbackRoute from "./controllers/feedback.js";
-import notificationRoute from "./controllers/notifications.js";
+import usersRouter from "./controllers/users.controller.js";
+import decksRouter from "./controllers/decks.controller.js";
+import searchRouter from "./controllers/search.controller.js";
+import feedbackRoute from "./controllers/feedback.controller.js";
+import notificationRoute from "./controllers/notifications.controller.js";
 import unknownEndpoint from "./middlewares/unknownEndpoint.middleware.js";
-import cardsRouter from "./controllers/cards.js";
+import cardsRouter from "./controllers/cards.controller.js";
 import errorHandler from "./middlewares/error.middleware.js";
-import authRouter from "./controllers/auth.js";
+import authRouter from "./controllers/auth.controller.js";
 
 const app = express();
 

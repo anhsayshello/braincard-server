@@ -1,5 +1,5 @@
-import Notification from "../models/notification.js";
-import User from "../models/user.js";
+import Notification from "../models/notification.model.js";
+import User from "../models/user.model.js";
 import AppError from "../utils/apperror.js";
 
 const notificationService = {

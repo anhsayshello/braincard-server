@@ -1,19 +1,17 @@
 import mongoose from "mongoose";
-import Deck from "../models/deck.js";
-import User from "../models/user.js";
+import Deck from "../models/deck.model.js";
+import User from "../models/user.model.js";
 import AppError from "../utils/apperror.js";
 
 const deckService = {
   async getAllDecks(userId) {
     const allDecks = await Deck.aggregate([
-      // Match decks của user
       {
         $match: {
           userId: mongoose.Types.ObjectId.createFromHexString(userId),
         },
       },
 
-      // Lookup cards và tính toán stats
       {
         $lookup: {
           from: "cards",
@@ -23,7 +21,6 @@ const deckService = {
         },
       },
 
-      // Add computed fields
       {
         $addFields: {
           totalCards: { $size: "$cards" },
@@ -54,14 +51,12 @@ const deckService = {
         },
       },
 
-      // Remove cards array (không cần thiết trong response)
       {
         $project: {
           cards: 0,
         },
       },
 
-      // Sort by creation date
       {
         $sort: { createdAt: -1 },
       },

@@ -1,5 +1,5 @@
-import Feedback from "../models/feedback.js";
-import User from "../models/user.js";
+import Feedback from "../models/feedback.model.js";
+import User from "../models/user.model.js";
 import AppError from "../utils/apperror.js";
 
 const feedbackService = {

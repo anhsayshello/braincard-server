@@ -1,5 +1,5 @@
-import Card from "../models/card.js";
-import Deck from "../models/deck.js";
+import Card from "../models/card.model.js";
+import Deck from "../models/deck.model.js";
 import AppError from "../utils/apperror.js";
 import { formatCardResponse } from "../utils/utils.js";
 

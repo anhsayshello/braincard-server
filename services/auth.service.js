@@ -2,7 +2,7 @@ import config from "../utils/config.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import AppError from "../utils/apperror.js";
-import User from "../models/user.js";
+import User from "../models/user.model.js";
 
 const authService = {
   async register(username, name, password) {
