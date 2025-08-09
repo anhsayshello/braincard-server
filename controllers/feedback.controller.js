@@ -7,7 +7,12 @@ const feedbackRoute = Router();
 feedbackRoute.post("/", authenticateToken, async (req, res, next) => {
   try {
     const { content, type } = req.body;
-    const result = await feedbackService(req.userId, content, type);
+    console.log(content, type);
+    const result = await feedbackService.sendFeedback(
+      req.userId,
+      content,
+      type
+    );
     return res.status(201).json(result);
   } catch (error) {
     next(error);
