@@ -10,7 +10,7 @@ export default function authenticateToken(req, res, next) {
       return res.status(401).json({ error: "token missing" });
     }
 
-    const decodedToken = jwt.verify(token, config.SECRET);
+    const decodedToken = jwt.verify(token, config.JWT_SECRET);
     if (!decodedToken.id) {
       return res.status(401).json({ error: "token invalid" });
     }
