@@ -4,6 +4,7 @@ import AppError from "../utils/apperror.js";
 
 const userService = {
   async getMe(userId) {
+    console.log(userId);
     const user = await User.findById(userId);
     return user;
   },

@@ -1,8 +1,9 @@
-import config from "../utils/config.js";
+import config, { oauth2client } from "../utils/config.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import AppError from "../utils/apperror.js";
 import User from "../models/user.model.js";
+import axios from "axios";
 
 const authService = {
   async register(username, name, password) {
@@ -30,7 +31,7 @@ const authService = {
       id: savedUser._id,
     };
 
-    const token = jwt.sign(userForToken, config.SECRET, {
+    const token = jwt.sign(userForToken, config.JWT_SECRET, {
       expiresIn: 60 * 60 * 24,
     });
 
@@ -45,7 +46,7 @@ const authService = {
     };
   },
 
-  async login(username, password) {
+  async usernameLogin(username, password) {
     const user = await User.findOne({ username });
     const passwordCorrect =
       user === null ? false : await bcrypt.compare(password, user.passwordHash);
@@ -62,10 +63,10 @@ const authService = {
       id: user._id,
     };
 
-    const token = jwt.sign(userForToken, config.SECRET, {
+    const token = jwt.sign(userForToken, config.JWT_SECRET, {
       expiresIn: 60 * 60 * 24,
     });
-    console.log(token);
+    console.log("username token: ", token);
 
     return {
       access_token: token,
@@ -78,8 +79,41 @@ const authService = {
     };
   },
 
+  async googleLogin(code) {
+    const googleRes = await oauth2client.getToken(code);
+    oauth2client.setCredentials(googleRes.tokens);
+
+    const userRes = await axios.get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+    );
+    const { email, name, picture } = userRes.data;
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        email,
+        name,
+        image: picture,
+      });
+    }
+    const userForToken = {
+      email: user.email,
+      id: user._id,
+    };
+
+    const token = jwt.sign(userForToken, config.JWT_SECRET, {
+      expiresIn: 60 * 60 * 24,
+    });
+    console.log("google token: ", token);
+
+    return {
+      access_token: token,
+      expires: "1d",
+      user,
+    };
+  },
+
   async logout(token) {
-    const decodedToken = jwt.verify(token, config.SECRET);
+    const decodedToken = jwt.verify(token, config.JWT_SECRET);
     if (!decodedToken.id) {
       throw new AppError("Invalid token", 400);
     }
