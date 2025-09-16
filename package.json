@@ -11,8 +11,7 @@
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "build": "netlify deploy --prod"
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "axios": "^1.11.0",
