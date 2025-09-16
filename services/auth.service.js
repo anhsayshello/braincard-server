@@ -7,6 +7,7 @@ import axios from "axios";
 
 const authService = {
   async register(username, name, password) {
+    console.log(username, name, password);
     if (!username || !name || !password) {
       throw new AppError("Username, name and password are required", 400);
     }
@@ -19,18 +20,16 @@ const authService = {
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    const user = new User({
+    const user = await User.create({
       username,
       name,
       passwordHash,
     });
 
-    const savedUser = await user.save();
     const userForToken = {
-      username: savedUser.username,
-      id: savedUser._id,
+      username: user.username,
+      id: user._id,
     };
-
     const token = jwt.sign(userForToken, config.JWT_SECRET, {
       expiresIn: 60 * 60 * 24,
     });
@@ -39,9 +38,9 @@ const authService = {
       access_token: token,
       expires: "1d",
       user: {
-        id: savedUser._id,
-        username: savedUser.username,
-        name: savedUser.name,
+        id: user._id,
+        username: user.username,
+        name: user.name,
       },
     };
   },
