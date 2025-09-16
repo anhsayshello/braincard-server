@@ -11,7 +11,8 @@
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "build": "netlify deploy --prod"
   },
   "dependencies": {
     "axios": "^1.11.0",
@@ -22,7 +23,10 @@
     "googleapis": "^155.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
-    "mongoose": "^8.15.1"
+    "mongoose": "^8.15.1",
+    "netlify-cli": "^23.5.1",
+    "netlify-lambda": "^0.4.0",
+    "serverless-http": "^4.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",

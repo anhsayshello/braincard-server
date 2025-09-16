@@ -6,3 +6,4 @@ dist/
 .env.staging
 uploads/
 .DS_Store
+.netlify
