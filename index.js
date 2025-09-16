@@ -17,8 +17,12 @@ const app = express();
 
 logger.info("connecting to", config.MONGODB_URI);
 
+const option = {
+  socketTimeoutMS: 30000,
+};
+
 mongoose
-  .connect(config.MONGODB_URI)
+  .connect(config.MONGODB_URI, option)
   .then(() => {
     logger.info("connected to MongoDB");
   })
@@ -45,8 +49,6 @@ app.use("/notification", notificationRoute);
 app.use(unknownEndpoint);
 app.use(errorHandler);
 
-// app.listen(config.PORT, () => {
-//   logger.info(`Server running on port ${config.PORT}`);
-// });
-
-export default app;
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`);
+});
