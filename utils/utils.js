@@ -7,12 +7,10 @@ export const configureJSON = (schema) =>
       returnedObject.id = returnedObject._id.toString();
       delete returnedObject._id;
       delete returnedObject.__v;
-      // the passwordHash should not be revealed
       delete returnedObject.passwordHash;
     },
   });
 
-// Helper function để tính toán thời gian review tiếp theo
 export const calculateNextReview = (
   currentStatus,
   newStatus,
@@ -77,7 +75,7 @@ export const calculateNextReview = (
           newInterval = currentInterval + 2;
         } else {
           // Từ GOOD/EASY giữ GOOD: tăng bình thường
-          newInterval = currentInterval + 2;
+          newInterval = currentInterval + 4;
         }
         nextReview = new Date(
           now.getTime() + newInterval * 24 * 60 * 60 * 1000
@@ -87,7 +85,7 @@ export const calculateNextReview = (
         // Easy: bonus tùy currentStatus
         if (currentStatus === CardStatus.Easy) {
           // Liên tiếp EASY: bonus lớn (streak reward)
-          newInterval = currentInterval + 4;
+          newInterval = currentInterval + 5;
         } else if (currentStatus === CardStatus.Good) {
           // Từ GOOD lên EASY: thưởng progression
           newInterval = currentInterval + 3;
@@ -110,14 +108,11 @@ export const calculateNextReview = (
   return { nextReview, newInterval };
 };
 
-// Helper function để validate status
 export const isValidStatus = (status) => {
   return Object.values(CardStatus).includes(Number(status));
 };
 
-// Helper function để format response với thông tin hiển thị
 export const formatCardResponse = (card) => {
-  // Tính thời gian còn lại đến lần review tiếp theo
   const now = new Date();
   const nextReview = new Date(card.nextReview);
   const timeDiff = nextReview.getTime() - now.getTime();
@@ -129,18 +124,15 @@ export const formatCardResponse = (card) => {
     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
 
-    // Format theo status: Forget hiển thị phút, các status khác hiển thị ngày
     if (card.status === CardStatus.Forget) {
-      // Forget: chỉ hiển thị phút
       if (minutes <= 1) {
         timeUntilReview = "Review in 1 minute";
       } else {
         timeUntilReview = `Review in ${minutes} minutes`;
       }
     } else {
-      // Hard, Good, Easy: chỉ hiển thị ngày
       if (days <= 0) {
-        timeUntilReview = "Review in 1 day"; // Nếu chưa đến 1 ngày thì hiển thị 1 day
+        timeUntilReview = "Review in 1 day";
       } else if (days === 1) {
         timeUntilReview = "Review in 1 day";
       } else {
