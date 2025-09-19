@@ -8,7 +8,7 @@ import {
 } from "../utils/utils.js";
 
 const cardService = {
-  async getAllCards(deckId, q = null, page = "1") {
+  async getCards(deckId, q = null, page = "1") {
     const searchQuery = {
       deckId: deckId,
     };
@@ -29,7 +29,10 @@ const cardService = {
     const skip = (pageNum - 1) * limitNum;
     const totalPages = Math.ceil(totalCards / limitNum);
 
-    const cards = await Card.find(searchQuery).skip(skip).limit(limitNum);
+    const cards = await Card.find(searchQuery)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum);
     const formattedCards = cards.map((card) => formatCardResponse(card));
 
     return {

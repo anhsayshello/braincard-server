@@ -8,7 +8,7 @@ cardsRouter.get("/:deckId/cards", async (req, res, next) => {
   try {
     const { deckId } = req.params;
     const { q, page } = req.query;
-    const result = await cardService.getAllCards(deckId, q, page);
+    const result = await cardService.getCards(deckId, q, page);
     res.status(200).json(result);
   } catch (error) {
     next(error);
